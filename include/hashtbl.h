@@ -85,16 +85,21 @@ namespace ac
 		 *
 		 * @return     True se estiver vazio, false caso contrário.
 		 */
-		bool empty(){ return this->m_count == 0; }
+		bool empty( void ){ return (this->m_count == 0); }
 
 		/**
 		 * @brief      Retorna a quantidade de elementos atualmente armazenados na tabela.
 		 *
 		 * @return     A quantidade de elementos.
 		 */
-		size_type size() { return this->m_count; }
+		size_type size( void ) { return this->m_count; }
 
-		size_type tam() { return this->m_size; }
+		/**
+		 * @brief      Retorna o atual tamanho da tabela de dispersão.
+		 *
+		 * @return     O tamanho da tabela.
+		 */
+		size_type tam( void ) { return this->m_size; }
 		/**
 		 * @brief      Retorna a quantidade de elementos da tabela que estão na lista de colisão associada a chave passada,
 		 *
@@ -177,6 +182,54 @@ namespace ac
 			}
 
 			return false;
+		}
+
+		/**
+		 * @brief      Recupera as informação associada a chave passada como argumento para o método.
+		 *
+		 * @param[in]  k_    A chave.
+		 * @param      d_    Informação associada.
+		 *
+		 * @return     True se a chave for encontrada, false caso contrário.
+		 */
+		bool retrieve( const KeyType & k_, DataType & d_ ) const
+		{
+			KeyHash hashFunc;
+			auto end( hashFunc( k_ ) % this->m_size );
+			KeyEqual equalFunc;
+			
+			// Verifica se tabela não estão vazias
+			if( !this->m_data_table[end].empty() )
+			{
+				// Percorre a tabela.
+				for ( auto it = this->m_data_table[end].begin(); it != this->m_data_table[end].end(); ++it)
+				{
+					// Verifica se a chave que procuramos.
+					if ( equalFunc( (*it).m_key, k_ ) )
+					{
+						d_ = (*it).m_data;
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/**
+		 * @brief      Libera toda a memória associada às listas de colisão da tabela, removendo os elementos.
+		 */
+		void clear( void )
+		{
+			if( !this->empty() ) //< Verifica se o hash não está vazio.
+			{
+				for (int i = 0; i < this->m_size; ++i)
+				{
+					// Verifica se a tabela não está vazia.
+					if( !this->m_data_table[i].empty()) this->m_data_table[i].clear();
+				}
+				this->m_count = 0;
+			}
 		}
 
 		//template< typename kt, typename dt, typename kh, typename ke> friend std::ostream& operator<<( std::ostream & os, const ac::HashTbl< KeyType, DataType, KeyHash, KeyEqual > h );

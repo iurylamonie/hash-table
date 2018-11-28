@@ -38,5 +38,31 @@ int main()
 		std::cout << i << " -> " << h1.count(i) << std::endl;
 	}
 
+	std::cout << std::endl;
+	ac::HashTbl<int, int> h2;
+	std::cout << "Tamanho? " << h2.tam()  << std::endl;
+	std::cout << "Empty? " << (h2.empty()?  "Sim":"Não" ) << std::endl;
+	std::cout << "Size? " << h2.size()  << std::endl;
+	for (int i = 0; i < 100 ; ++i)
+	{
+		h2.insert(i, i*i);
+	}
+	std::cout << "Tamanho? " << h2.tam()  << std::endl;
+	std::cout << "Empty? " << (h2.empty()?  "Sim":"Não" ) << std::endl;
+	std::cout << "Size? " << h2.size()  << std::endl;
+	for (int i = 0; i < h2.tam(); ++i)
+	{
+		std::cout << i << " -> " << h2.count(i) << std::endl;
+	}
+
+	int num = 0;
+	h2.retrieve(199, num);
+	std::cout << num << std::endl;
+
+	h2.clear();
+	for (int i = 0; i < h2.tam(); ++i)
+	{
+		std::cout << i << " -> " << h2.count(i) << std::endl;
+	}
 	return 0;
 }

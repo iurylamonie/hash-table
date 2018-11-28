@@ -100,6 +100,7 @@ namespace ac
 		 * @return     O tamanho da tabela.
 		 */
 		size_type tam( void ) { return this->m_size; }
+		
 		/**
 		 * @brief      Retorna a quantidade de elementos da tabela que estão na lista de colisão associada a chave passada,
 		 *
@@ -232,6 +233,48 @@ namespace ac
 			}
 		}
 
+		/**
+		 * @brief      Retorna uma referência para o dado associado a chave fornecida, se existir.
+		 *	           Se a chave não estiver na tabela, o método realizar a inserção e retorna o novo dado.
+		 *
+		 * @param[in]  k_    A chave fornecida.
+		 *
+		 * @return     A referencia ao dado associado.
+		 */
+		DataType& operator[]( const KeyType& k_ )
+		{
+			KeyHash hashFunc;
+			KeyEqual equalFunc;
+			auto end( hashFunc( k_ ) % this->m_size );
+			//Percorre a tabela.
+			for (auto i = this->m_data_table[end].begin(); i != this->m_data_table[end].end(); ++i)
+			{
+				// Verifica se é a chave que procuramos.
+				if( equalFunc( (*i).m_key,  k_ ) )
+				{
+					return (*i).m_data;
+				}
+			}
+
+			this->insert( k_, DataType() ); //< insert chama push_front.
+			// O tamanho da tabela pode ter sido alterada, então calculamos o novo end.
+			end = hashFunc( k_ ) % this->m_size;
+			auto it = this->m_data_table[end].begin();
+			// Percorre a tabela atrás do item com a chave especifica.
+			while( true )
+			{
+				if ( equalFunc ( (*it).m_key, k_ ) ) break;
+				++it;
+			}
+
+			return (*it).m_data;
+
+		}
+
+		DataType& at( const KeyType & k_ )
+		{
+			
+		}
 		//template< typename kt, typename dt, typename kh, typename ke> friend std::ostream& operator<<( std::ostream & os, const ac::HashTbl< KeyType, DataType, KeyHash, KeyEqual > h );
 	private:
 		void rehash() {} 

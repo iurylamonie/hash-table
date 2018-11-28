@@ -59,6 +59,8 @@ int main()
 	h2.retrieve(199, num);
 	std::cout << num << std::endl;
 
+	std::cout << "h1.Operator[]: " << h2[2] << std::endl;
+	std::cout << "h1.Operator[]: " << h2[101] << std::endl;
 	h2.clear();
 	for (int i = 0; i < h2.tam(); ++i)
 	{

@@ -1,8 +1,11 @@
 #ifndef _HASHTBL_H_
 #define _HASHTBL_H_
 
+#include <iostream>
 #include <functional> //< std::hash and std::equal_to
 #include <forward_list> //< std::forward_list
+
+//#include "list.h"
 using size_type = unsigned int;
 
 /**
@@ -58,7 +61,7 @@ namespace ac
 			this->m_count = 0;
 			this->m_data_table = new std::forward_list< Entry >[primo];
 		}
-		~HashTbl();
+		//~HashTbl();
 	
 		/**
 		 * @brief      Construtor copia.
@@ -77,10 +80,106 @@ namespace ac
 			}
 		}
 
+		/**
+		 * @brief      Verifica se o hash está vazio.
+		 *
+		 * @return     True se estiver vazio, false caso contrário.
+		 */
+		bool empty(){ return this->m_count == 0; }
+
+		/**
+		 * @brief      Retorna a quantidade de elementos atualmente armazenados na tabela.
+		 *
+		 * @return     A quantidade de elementos.
+		 */
+		size_type size() { return this->m_count; }
+
+		size_type tam() { return this->m_size; }
+		/**
+		 * @brief      Retorna a quantidade de elementos da tabela que estão na lista de colisão associada a chave passada,
+		 *
+		 * @param[in]  k_    A chave passada.
+		 *
+		 * @return     A quantidade de elementos.
+		 */
+		size_type count( const KeyType k_ ) const
+		{
+			KeyHash hashFunc;
+			auto end( hashFunc( k_ ) % this->m_size );
+			size_type count  = 0;
+			for ( auto it = this->m_data_table[end].begin(); it != this->m_data_table[end].end(); ++it) 
+			{ 
+				++count; 
+			}
+			return count;
+		}
+		
+		/**
+		 * @brief      Insere na tabela a informação passada e associada a uma chave informada .
+		 *
+		 * @param[in]  k_    A chave informada.
+		 * @param[in]  d_    A informação passada.
+		 *
+		 * @return     True se a chave já existir na tabela, false caso contrário.
+		 */
 		bool insert( const KeyType & k_, const DataType & d_ )
 		{
-			
+			KeyHash hashFunc;
+			KeyEqual equalFunc;
+			// Armazena o endereço da tabela produzida pela dispersão.
+			auto end( hashFunc( k_ ) % this->m_size ); 
+			Entry new_entry( k_, d_ ); //< Cria um novo "item" baseada nos argumentos passados.
+			if( !this->m_data_table[end].empty() )
+			{
+				// Percorre toda a lista localizada no endereço especifico da tabela..
+				for ( auto it = this->m_data_table[end].begin(); it != this->m_data_table[end].end(); ++it)
+				{
+					if ( equalFunc( (*it).m_key, k_ ) ) //< Verifica se as chaves são iguais
+					{
+						(*it).m_data = d_; //< Troca os valores se a chave já existe na lista.
+						return false;
+					}
+				}
+			}
+			// Insere o novo item na tabela.
+			this->m_data_table[end].push_front( new_entry );
+			++this->m_count;
+			return true; //< Um item não existente 
 		}
+
+		/**
+		 * @brief      Remove um item de tabela identificado por sua chave.
+		 *
+		 * @param[in]  k_    A chave.
+		 * @return     True se o item for encontrado, false caso contrário.
+		 */
+		bool erase( const KeyType k_ )
+		{
+			KeyHash hashFunc;
+			KeyEqual equalFunc;
+			auto end( hashFunc( k_ ) % this->m_size );
+
+			// Verifica se o hash e a tabela não estão vazias
+			if( !this->empty() && !this->m_data_table[end].empty() )
+			{
+				auto it_slow = this->m_data_table[end].before_begin();
+				// Percorre toda a tabela atrás do item com a chave especifica.
+				for ( auto it = this->m_data_table[end].begin(); it != this->m_data_table[end].end() ; ++it)
+				{
+					if( equalFunc( (*it).m_key, k_ ) ) 
+					{
+						this->m_data_table[end].erase_after( it_slow );
+						--this->m_count;
+						return true;
+					}
+					it_slow = it;
+				}
+			}
+
+			return false;
+		}
+
+		//template< typename kt, typename dt, typename kh, typename ke> friend std::ostream& operator<<( std::ostream & os, const ac::HashTbl< KeyType, DataType, KeyHash, KeyEqual > h );
 	private:
 		void rehash() {} 
 
@@ -101,5 +200,4 @@ bool isPrimo( const size_type & value )
 
 	return true;
 }
-
 #endif

@@ -14,7 +14,7 @@ Destrutor (2 pontos);
 (-)insert() : 12 pontos. >>> OBS:: Falta ele utilizar o rehash
 (-)erase() : 12 pontos.
 (-)retrieve() : 12 pontos.
-( )clear() : 8 pontos.
+(-)clear() : 8 pontos.
 (x)empty() : 3 pontos.
 (x)size() : 3 pontos
 ( )operator<<() : 8 pontos.

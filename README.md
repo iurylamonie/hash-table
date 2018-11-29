@@ -39,3 +39,7 @@ Destrutor (2 pontos);
 - gengibre (pouco)
 - Hortelam
 - Colve-Flor
+- 
+
+*Ovo
+9 substitutos veganos para ovos

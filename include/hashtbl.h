@@ -62,7 +62,7 @@ namespace ac
 			this->m_data_table = new std::forward_list< Entry >[primo];
 		}
 		//~HashTbl();
-	
+		
 		/**
 		 * @brief      Construtor copia.
 		 *
@@ -79,7 +79,7 @@ namespace ac
 				this->m_data_table[i] = other.m_data_table[i];
 			}
 		}
-
+		
 		/**
 		 * @brief      Verifica se o hash está vazio.
 		 *
@@ -271,13 +271,55 @@ namespace ac
 
 		}
 
+		/**
+		 * @brief      Retorna uma referência para o dado associado a chave fornecida.
+		 *
+		 * @param[in]  k_    A chave fornecida.
+		 *
+		 * @return     A referência para o dado associado.
+		 */
 		DataType& at( const KeyType & k_ )
 		{
+			KeyHash hashFunc;
+			KeyEqual equalFunc;
+			auto end( hashFunc( k_ ) % this->m_size );
+			auto it = this->m_data_table[end].begin();
+			while( it != this->m_data_table[end].end() )
+			{
+				if( equalFunc( (*it).m_key, k_ ) ) return (*it).m_data;
+				++it;
+			}
 			
+			throw std::out_of_range ("Out of Range error");
+			return (*it).m_data;
 		}
-		//template< typename kt, typename dt, typename kh, typename ke> friend std::ostream& operator<<( std::ostream & os, const ac::HashTbl< KeyType, DataType, KeyHash, KeyEqual > h );
+		
+		/**
+		 * @brief      Imprime os dados do hash.
+		 */
+		void print_hash()
+		{
+			for( size_type i = 0; i < this->m_size; ++i )
+			{
+				std::cout << "[" << i << "]" << " -> ";
+				// Verifica se a tabela não está vazia.
+				if( !this->m_data_table[i].empty() )
+				{
+					for (auto it = this->m_data_table[i].begin(); it != this->m_data_table[i].end(); ++it)
+					{
+						std::cout << (*it).m_data << " ";
+					}
+				}
+				std::cout << std::endl;
+				
+			}
+		}
+		//template <typename kt, typename dt, typename kh, typename ke >friend std::ostream& operator<<( std::ostream& , const HashTbl<kt, dt>& );
 	private:
-		void rehash() {} 
+		void rehash()
+		{
+
+		} 
 
 		size_type m_size;
 		size_type m_count;
@@ -285,6 +327,18 @@ namespace ac
 		static const short DEFAULT_SIZE = 11;
 	};
 };
+
+/*
+template < typename KeyType, //< Tipo da chave.
+			   typename DataType, //< Tipo da informação.
+			   typename KeyHash = std::hash< KeyType >,  //< function hash.
+			   typename KeyEqual = std::equal_to< KeyType > > //< function de comparação de chaves.
+std::ostream& operator<<( std::ostream& os, const ac::HashTbl< KeyType, DataType, KeyHash, KeyEqual >& h )
+{
+	os << "pinto";
+	return os;
+}
+*/
 
 bool isPrimo( const size_type & value )
 {

@@ -18,7 +18,7 @@ Destrutor (2 pontos);
 (x)empty() : 3 pontos.
 (x)size() : 3 pontos
 ( )operator<<() : 8 pontos.
-( )at() : 11 pontos.
+(-)at() : 11 pontos.
 ( )operator[]() : 11 pontos.
 (x)count() : 6 pontos.
 ( )rehash : 15 pontos.

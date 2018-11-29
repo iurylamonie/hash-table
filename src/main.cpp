@@ -61,10 +61,14 @@ int main()
 
 	std::cout << "h1.Operator[]: " << h2[2] << std::endl;
 	std::cout << "h1.Operator[]: " << h2[101] << std::endl;
+	std::cout << "at: " << h2.at(2) << std::endl;
+	std::cout << "at: " << h2.at(101) << std::endl;
+	//std::cout << "at: " << h2.at(1012) << std::endl;
+	h2.print_hash();
 	h2.clear();
-	for (int i = 0; i < h2.tam(); ++i)
-	{
-		std::cout << i << " -> " << h2.count(i) << std::endl;
-	}
+	std::cout << ">>> Clear\n" << std::endl;
+	h2.print_hash();
+	h2.insert(130, 6666);
+	h2.print_hash();
 	return 0;
 }

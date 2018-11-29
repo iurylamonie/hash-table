@@ -46,20 +46,23 @@ namespace ac
 		 */
 		HashTbl( size_type tbl_size_ = DEFAULT_SIZE)
 		{
-			// Armazena o menor número primo maior que tbl_size.
-			size_type primo; 
-			// Procuro o menor número primo maior que tbl_size.
-			for( size_type i = 1; ; ++i )
+			// Verifica se não é primo.
+			if( !isPrimo( tbl_size_ ) )
 			{
-				if( isPrimo( tbl_size_ + i ) ) //< Chama a função isPrimo pra verificar se é primo.
+				for( size_type i = tbl_size_ % 2 == 0 ? tbl_size_+1:tbl_size_+2; ; i += 2 )
 				{
-					primo = tbl_size_ + i;
-					break; //< Break ao encontrar o proximo primo seguinte a tbl_size.
+					if( isPrimo( tbl_size_ ) ) //< Chama a função isPrimo pra verificar se é primo.
+					{
+						tbl_size_ = i;
+						break; //< Break ao encontrar o proximo primo seguinte a tbl_size.
+					}
 				}
 			}
-			this->m_size = primo;
+
+			this->m_size = tbl_size_;
 			this->m_count = 0;
-			this->m_data_table = new std::forward_list< Entry >[primo];
+			this->m_data_table = new std::forward_list< Entry >[tbl_size_];
+			this->rehash();
 		}
 		//~HashTbl();
 		
@@ -314,11 +317,56 @@ namespace ac
 				
 			}
 		}
-		//template <typename kt, typename dt, typename kh, typename ke >friend std::ostream& operator<<( std::ostream& , const HashTbl<kt, dt>& );
-	private:
-		void rehash()
+		/*template <typename kt, typename dt, typename kh, typename ke >*/
+		friend std::ostream& operator<<( std::ostream& os , const HashTbl/*<kt, dt, kh, ke>*/& h )
 		{
+			for( size_type i = 0; i < h.m_size; ++i )
+			{
+				std::cout << "[" << i << "]" << " -> ";
+				// Verifica se a tabela não está vazia.
+				if( !h.m_data_table[i].empty() )
+				{
+					for (auto it = h.m_data_table[i].begin(); it != h.m_data_table[i].end(); ++it)
+					{
+						std::cout << (*it).m_data << " ";
+					}
+				}
+				std::cout << std::endl;
+				
+			}
+			return os;
+		}
+	private:
+		void rehash( void )
+		{
+			size_type new_size = this->m_size * 2;
+			// Verifica se não é primo.
+			for( size_type i = new_size % 2 == 0 ? new_size+1:new_size+2; ; i += 2 )
+			{
+				if( isPrimo( new_size ) ) //< Chama a função isPrimo pra verificar se é primo.
+				{
+					new_size = i;
+					break; //< Break ao encontrar o proximo primo seguinte a tbl_size.
+				}
+			}
+			std::forward_list< Entry > * new_data_table =  new std::forward_list< Entry >[new_size];
+			KeyHash hashFunc;
+			// Percorre todos itens da tabela.
+			for( size_type i = 0; i < this->m_size ; ++i )
+			{
+				if( !this->m_data_table[i].empty() )
+				{
+					for (auto it = this->m_data_table[i].begin(); it != this->m_data_table[i].end(); ++it)
+					{
+						// endereço na nova tabela.
+						auto end( hashFunc( (*it).m_key ) % new_size );
+						new_data_table[end].push_front( *it ); //< Insere Entry na tabela.
+					}
+				}
+				this->m_data_table[i].clear();
+			}
 
+			delete[] this->m_data_table;
 		} 
 
 		size_type m_size;
@@ -335,7 +383,7 @@ template < typename KeyType, //< Tipo da chave.
 			   typename KeyEqual = std::equal_to< KeyType > > //< function de comparação de chaves.
 std::ostream& operator<<( std::ostream& os, const ac::HashTbl< KeyType, DataType, KeyHash, KeyEqual >& h )
 {
-	os << "pinto";
+	os << "teste";
 	return os;
 }
 */

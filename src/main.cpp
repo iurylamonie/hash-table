@@ -64,11 +64,21 @@ int main()
 	std::cout << "at: " << h2.at(2) << std::endl;
 	std::cout << "at: " << h2.at(101) << std::endl;
 	//std::cout << "at: " << h2.at(1012) << std::endl;
-	h2.print_hash();
+	//h2.print_hash();
+	std::cout << "--------" << std::endl;
+	std::cout << h2 << std::endl;
 	h2.clear();
 	std::cout << ">>> Clear\n" << std::endl;
-	h2.print_hash();
+	//h2.print_hash();
+	std::cout << "--------" << std::endl;
+	std::cout << h2 << std::endl;
 	h2.insert(130, 6666);
-	h2.print_hash();
+	//h2.print_hash();
+	std::cout << "--------" << std::endl;
+	std::cout << h2 << std::endl;
+
+	ac::HashTbl<int, int> h3(h1);
+	std::cout << "----h3---- " << std::endl;
+	std::cout << h3 << std::endl;
 	return 0;
 }

@@ -22,3 +22,20 @@ Destrutor (2 pontos);
 ( )operator[]() : 11 pontos.
 (x)count() : 6 pontos.
 ( )rehash : 15 pontos.
+
+* Selan Gurmet
+- Bandeija amendoim 10 - 15
+- Assar o ame
+- Esfriar
+- Descarcar
+- Ventilador para tirar cascas
+- Processador de Alimento
+
+*Suco
+ -- alimentos acidos vs alcalinos (impacto na saude)
+- Agua (pouca)
+- Pipino 1/2
+- maça verde (tirar as sementes) 1
+- gengibre (pouco)
+- Hortelam
+- Colve-Flor

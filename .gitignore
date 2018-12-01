@@ -1,5 +1,4 @@
 bin
 doc
 .vscode
-*.txt
 !implementar.txt

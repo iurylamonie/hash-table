@@ -1,7 +1,8 @@
+//@autor Iury Lamonie
 #include <iostream>
 #include <functional> //< std::hash<>
 #include <string> //< std::string
-#include <utility> //< std::pair
+#include <utility> // < std::pair
 #include "hashtbl.h"
 using pair_s_i = std::pair< std::string, int >;
 int main()
@@ -80,5 +81,15 @@ int main()
 	ac::HashTbl<int, int> h3(h1);
 	std::cout << "----h3---- " << std::endl;
 	std::cout << h3 << std::endl;
+
+
+	std::cout << ( ( (3/2 == 1 ) and (3%2 != 0) )? "Sim":"Não") << std::endl;
+	
+	ac::HashTbl<int,int> h4 = h2;
+	std::cout << h4 << std::endl;
+
+	ac::HashEntry<int,int> entry1(3,4), entry2(43,466), entry3(13,54), entry4(4,124), entry5(2,324), entry6(23,114); 
+	ac::HashTbl<int, int> hashList = { entry1, entry2, entry3,entry4,entry5,entry6, entry1,entry1 };
+	std::cout << hashList << std::endl;
 	return 0;
 }

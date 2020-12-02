@@ -1,9 +1,3 @@
-# Autores
-
-Iury Lamonie
-& 
-Leonardo Igor
-
 # 1. Introdução:
 
 Este projeto contém a implementação da estrutura de dados tabela de dispersão em C++.
